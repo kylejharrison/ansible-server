@@ -20,3 +20,8 @@ RUN apt-get install -y git
 
 RUN mkdir /root/.ssh
 ADD sources/id_rsa* /root/.ssh/
+
+# install setup script
+
+ADD sources/setup-ansible.sh /root/
+RUN chmod 755 /root/setup-ansible.sh
