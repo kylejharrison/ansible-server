@@ -15,13 +15,22 @@ RUN echo '[local]\nlocalhost\n' > /etc/ansible/hosts
 # Install git
 
 RUN apt-get install -y git
+RUN git config --global user.email "kylejharrison@gmail.com"
+RUN git config --global user.name "Kyle Harrison"
 
 # Install SSH keys
 
 RUN mkdir /root/.ssh
-ADD sources/id_rsa* /root/.ssh/
+ADD sources/ssh/* /root/.ssh/
 
-# install setup script
+# install setup scripts
 
-ADD sources/setup-ansible.sh /root/
-RUN chmod 755 /root/setup-ansible.sh
+ADD sources/scripts/* /root/
+RUN chmod 755 /root/*.sh
+
+# Edit .bashrc to start ssh-agent
+RUN cat /root/session-starter >> /root/.bashrc
+RUN rm /root/session-starter
+
+# Create playbook directory
+RUN mkdir /etc/ansible/playbooks
