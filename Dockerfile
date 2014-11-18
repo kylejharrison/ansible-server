@@ -22,15 +22,13 @@ RUN git config --global user.name "Kyle Harrison"
 
 RUN mkdir /root/.ssh
 ADD sources/ssh/* /root/.ssh/
+RUN chmod 400 /root/.ssh/id_rsa
 
 # install setup scripts
 
 ADD sources/scripts/* /root/
 RUN chmod 755 /root/*.sh
 
-# Edit .bashrc to start ssh-agent
-RUN cat /root/session-starter >> /root/.bashrc
-RUN rm /root/session-starter
 
 # Create playbook directory
 RUN mkdir /etc/ansible/playbooks
