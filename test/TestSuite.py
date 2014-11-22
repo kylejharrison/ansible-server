@@ -102,6 +102,12 @@ class DockerFileTests(unittest.TestCase):
         out, err, exit_code = run_process(command)
         self.assertRegexpMatches(out, '^/root/setup-ansible.sh', msg='Stdout: ' + out + 'Stderr: ' + err)
 
+    def test_setup_ssh_agent_is_present(self):
+        self.docker_cmd.append('\"ls /root/setup-ssh-agent.sh\"')
+        command = self.docker_cmd
+        out, err, exit_code = run_process(command)
+        self.assertRegexpMatches(out, '^/root/setup-ssh-agent.sh', msg='Stdout: ' + out + 'Stderr: ' + err)
+
     def test_bashrc_is_present(self):
         self.docker_cmd.append('\"ls /root/.bashrc\"')
         command = self.docker_cmd
@@ -110,6 +116,12 @@ class DockerFileTests(unittest.TestCase):
 
     def test_setup_ansible_script_has_correct_permissions(self):
         self.docker_cmd.append('\"ls -l /root/setup-ansible.sh\"')
+        command = self.docker_cmd
+        out, err, exit_code = run_process(command)
+        self.assertRegexpMatches(out, '^\-rwxr\-xr\-x', msg='Stdout: ' + out + 'Stderr: ' + err)
+
+    def test_setup_ssh_agent_script_has_correct_permissions(self):
+        self.docker_cmd.append('\"ls -l /root/setup-ssh-agent.sh\"')
         command = self.docker_cmd
         out, err, exit_code = run_process(command)
         self.assertRegexpMatches(out, '^\-rwxr\-xr\-x', msg='Stdout: ' + out + 'Stderr: ' + err)

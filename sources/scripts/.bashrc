@@ -99,4 +99,5 @@ fi
 #fi
 
 # Source the setup ansible script
+. ~/setup-ssh-agent.sh
 . ~/setup-ansible.sh
