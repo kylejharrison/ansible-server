@@ -23,6 +23,7 @@ RUN git config --global user.name "Kyle Harrison"
 RUN mkdir /root/.ssh
 ADD sources/ssh/* /root/.ssh/
 RUN chmod 400 /root/.ssh/id_rsa
+RUN chmod 400 /root/.ssh/read_only
 
 # install setup scripts
 
