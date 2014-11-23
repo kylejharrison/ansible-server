@@ -1,2 +1,2 @@
 #!/bin/sh
-docker run -it mrkyle7/ansible-server:stable /bin/bash
+docker run -it mrkyle7/personal-ansible-server:stable /bin/bash
