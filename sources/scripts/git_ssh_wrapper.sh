@@ -1,3 +1,3 @@
 #!/bin/bash
 
-ssh -i /root/.ssh/readonly $1 $2
+ssh -i /root/.ssh/read_only $1 $2

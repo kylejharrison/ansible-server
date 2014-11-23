@@ -4,7 +4,7 @@ import unittest
 import subprocess
 import os
 
-DOCKER_IMAGE = 'mrkyle7/ansible-server:latest'
+DOCKER_IMAGE = 'mrkyle7/ansible-server:dev'
 BREAK = "==============="
 CWD = os.getcwd()
 
@@ -57,7 +57,8 @@ class DockerFileTests(unittest.TestCase):
     def test_can_start_docker_image(self):
         self.docker_cmd.append('id')
         out, err, exit_code = run_process(self.docker_cmd)
-        self.assertRegexpMatches(out, '^uid=0\(root\) gid=0\(root\) groups=0\(root\)', msg='Stdout: ' + out + 'Stderr: ' + err)
+        self.assertRegexpMatches(out, '^uid=0\(root\) gid=0\(root\) groups=0\(root\)',
+                                 msg='Stdout: ' + out + 'Stderr: ' + err)
         self.assertEquals(exit_code, 0)
 
     def test_ansible_is_installed(self):
@@ -163,17 +164,24 @@ class DockerFileTests(unittest.TestCase):
         self.assertEquals(exit_code, 0)
 
 
-# class ScriptTests(unittest.TestCase):
-#
-#     def setUp(self):
-#         self.docker_cmd = ['boot2docker', 'ssh', 'cd', CWD + '/..', '&&', 'docker', 'run', '-t', DOCKER_IMAGE,
-#                            '/bin/sh', '-c']
-#
-#     def test_setup_ansible_runs_cleanly(self):
-#         self.docker_cmd.append('/root/setup-ansible.sh')
-#         command = self.docker_cmd
-#         out, err, exit_code = run_process(command)
-#         self.assertEquals(exit_code, 0)
+class ScriptTests(unittest.TestCase):
+    def setUp(self):
+        self.docker_cmd = ['boot2docker', 'ssh', 'cd', CWD + '/..', '&&', 'docker', 'run', '-t', DOCKER_IMAGE,
+                           '/bin/sh', '-c']
+
+    def test_setup_ansible_runs_cleanly(self):
+        self.docker_cmd.append('\"export GIT_SSH=/root/git_ssh_wrapper.sh && /root/setup-ansible.sh\"')
+        out, err, exit_code = run_process(self.docker_cmd)
+        self.assertEquals(exit_code, 0)
+
+    def test_setup_ansible_clones_repository_correctly(self):
+        self.docker_cmd.append('\"export GIT_SSH=/root/git_ssh_wrapper.sh && /root/setup-ansible.sh && ls '
+                               '/etc/ansible/playbooks/home-playbooks/.gitignore\"')
+        out, err, exit_code = run_process(self.docker_cmd)
+        self.assertRegexpMatches(out.splitlines()[-1], '^/etc/ansible/playbooks/home-playbooks/.gitignore',
+                                 msg='Stdout: ' + out + 'Stderr: ' + err)
+        self.assertEquals(exit_code, 0)
+
 
 if __name__ == '__main__':
     unittest.main()
