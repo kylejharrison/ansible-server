@@ -4,7 +4,7 @@ import unittest
 import subprocess
 import os
 
-DOCKER_IMAGE = 'mrkyle7/personal-ansible-server'
+DOCKER_IMAGE = 'mrkyle7/ansible-server'
 BREAK = "==============="
 CWD = os.getcwd()
 

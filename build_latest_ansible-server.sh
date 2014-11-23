@@ -1,2 +1,2 @@
 #!/bin/sh
-docker build -t mrkyle7/personal-ansible-server:latest .
+docker build -t mrkyle7/ansible-server:latest .
